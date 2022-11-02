@@ -1,6 +1,6 @@
 package com.differentdoors.microsoft.services;
 
-import com.differentdoors.microsoft.models.OData;
+import com.differentdoors.microsoft.models.MResults;
 import com.differentdoors.microsoft.models.event.Event;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +14,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,9 +32,9 @@ public class CalendarEventsService {
     @Qualifier("Microsoft")
     private RestTemplate restTemplate;
 
-    public OData<Event> getCalendarView(String calendarId, @Nullable String top, @Nullable String start, @Nullable String end) throws JsonProcessingException {
+    public MResults<Event> getCalendarView(String userId, String calendarId, @Nullable String top, @Nullable String start, @Nullable String end) throws JsonProcessingException {
         Map<String, String> urlParams = new HashMap<>();
-        urlParams.put("path", "calendars/" + calendarId + "/calendarView");
+        urlParams.put("path", "users/" + userId + "/calendars/" + calendarId + "/calendarView");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 
@@ -46,7 +47,7 @@ public class CalendarEventsService {
         if (end != null) {
             builder.queryParam("enddatetime", end);
         }
-
-        return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), new TypeReference<OData<Event>>() {});
+        return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), new TypeReference<MResults<Event>>() {
+        });
     }
 }

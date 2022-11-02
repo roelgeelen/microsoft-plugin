@@ -1,6 +1,6 @@
 package com.differentdoors.microsoft.models.event;
 
-import com.calendarBackend.models.Azure.Response;
+import com.differentdoors.microsoft.models.Response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Event extends Response {
     private String id;
     private String subject;
-    private String distance;
     private EventBody body;
     private EventTime start;
     private EventTime end;
@@ -30,14 +29,6 @@ public class Event extends Response {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
     }
 
     public EventTime getStart() {

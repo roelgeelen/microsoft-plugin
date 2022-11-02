@@ -8,12 +8,12 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OData<T> {
+public class MResults<T> {
     @JsonProperty("@odata.context")
     private String context;
     private List<T> value;
 
-    public OData() {
+    public MResults() {
     }
 
     public String getContext() {
