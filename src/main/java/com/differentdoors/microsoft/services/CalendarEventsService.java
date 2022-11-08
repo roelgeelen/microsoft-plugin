@@ -50,4 +50,23 @@ public class CalendarEventsService {
         return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), new TypeReference<MResults<Event>>() {
         });
     }
+
+    public MResults<Event> getEvents(String userId, String calendarId) throws JsonProcessingException {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("path", "users/" + userId + "/calendars/" + calendarId + "/events");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
+
+        return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), new TypeReference<MResults<Event>>() {
+        });
+    }
+
+    public Event getEvent(String userId, String calendarId, String eventId) throws JsonProcessingException {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("path", "users/" + userId + "/calendars/" + calendarId + "/events/" + eventId);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
+
+        return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), Event.class);
+    }
 }

@@ -1,4 +1,4 @@
-package com.differentdoors.microsoft.models.event;
+package com.differentdoors.microsoft.models.calendar;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,12 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EventLocation {
-    private String displayName;
-    private String locationType;
-    private String uniqueId;
-    private String uniqueIdType;
-    private EventLocationCoordinates coordinates;
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+public class Calendar {
+    private String id;
+    private String name;
+    private String color;
+    private Owner owner;
 }

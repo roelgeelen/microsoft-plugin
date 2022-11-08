@@ -11,12 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EventLocation {
-    private String displayName;
-    private String locationType;
-    private String uniqueId;
-    private String uniqueIdType;
-    private EventLocationCoordinates coordinates;
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+public class Attendee {
+    private String type;
+    private EmailAddress emailAddress;
 }
