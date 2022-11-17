@@ -10,6 +10,10 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -68,5 +72,32 @@ public class CalendarEventsService {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 
         return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), Event.class);
+    }
+
+    public Event createEvent(String userId, String calendarId, Event event) throws Exception {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("path", "users/" + userId + "/calendars/" + calendarId + "/events");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        headers.set("content-type", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity <Object> entity = new HttpEntity<>(objectMapper.writeValueAsString(event), headers);
+
+        return objectMapper.readValue(restTemplate.postForObject(builder.buildAndExpand(urlParams).toUri(), entity, String.class), Event.class);
+    }
+
+    public Event updateEvent(String userId, String calendarId, String eventId, Event event) throws Exception {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("path", "users/" + userId + "/calendars/" + calendarId + "/events/" + eventId);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(event), headers);
+
+        return objectMapper.readValue(restTemplate.patchForObject(builder.buildAndExpand(urlParams).toUri(), requestEntity, String.class), Event.class);
     }
 }

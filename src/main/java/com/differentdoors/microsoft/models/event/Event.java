@@ -29,11 +29,14 @@ public class Event {
     private EventLocation location;
     private EventOrganizer organizer;
     private List<Attendee> attendees;
-
-    public String getTime() {
-      if (getStart() == null){
-          return "";
-      }
-        return getStart().getDateTime().toString();
-    }
+    private String createdDateTime;
+    private String lastModifiedDateTime;
+    private List<String> categories;
+    private String originalStartTimeZone;
+    private String originalEndTimeZone;
+    private String importance;
+    private String showAs;
+    private String transactionId;
+    private List<EventLocation> locations;
+    private double distance;
 }
