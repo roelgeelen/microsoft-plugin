@@ -2,16 +2,19 @@ package com.differentdoors.microsoft.services;
 
 import com.differentdoors.microsoft.models.MResults;
 import com.differentdoors.microsoft.models.calendar.Calendar;
-import com.differentdoors.microsoft.models.event.Event;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.RetryException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,7 +35,8 @@ public class CalendarService {
     @Qualifier("Microsoft")
     private RestTemplate restTemplate;
 
-    public MResults<Calendar> getCalendars(String userId) throws JsonProcessingException {
+    @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    public MResults<Calendar> getCalendars(String userId) throws Exception {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("path", "users/" + userId + "/calendars/");
 
@@ -42,12 +46,18 @@ public class CalendarService {
         });
     }
 
-    public Calendar getCalendar(String userId, String calendarId) throws JsonProcessingException {
+    @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    public Calendar getCalendar(String userId, String calendarId) throws Exception {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("path", "users/" + userId + "/calendars/" + calendarId);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 
         return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), Calendar.class);
+    }
+
+    @Recover
+    public RetryException recover(Exception t){
+        return new RetryException("Maximum retries reached: " + t.getMessage());
     }
 }
