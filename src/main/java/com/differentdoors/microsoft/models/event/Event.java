@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -31,7 +32,7 @@ public class Event {
     private List<Attendee> attendees;
     private String createdDateTime;
     private String lastModifiedDateTime;
-    private List<String> categories;
+    private List<String> categories = new ArrayList<>();
     private String originalStartTimeZone;
     private String originalEndTimeZone;
     private String importance;
@@ -39,4 +40,8 @@ public class Event {
     private String transactionId;
     private List<EventLocation> locations;
     private double distance;
+
+    public void addCategory(String category) {
+        this.categories.add(category);
+    }
 }
