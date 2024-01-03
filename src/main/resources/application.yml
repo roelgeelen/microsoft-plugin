@@ -1,7 +1,0 @@
-
-different_doors:
-  microsoft:
-    client_id: f6defd37-e5b2-417f-b9b5-26fd1a92d92c
-    client_secret: WR38Q~2vRuknsOXR49_5ctugRsekCSIMSYVENcJ2
-    token_url: https://login.microsoftonline.com/437aeb62-3231-4344-81db-3335e75bfee0/oauth2/v2.0/token
-    scope: https://graph.microsoft.com/.default
